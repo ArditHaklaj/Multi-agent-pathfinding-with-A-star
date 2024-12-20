@@ -10,16 +10,15 @@ class Simulation:
         self.agents = agents
         self.reservation_table = {}
 
-    def validate_paths(self):
+    def validate_paths(self, heuristic_fn):
         """
-        Validates and plans conflict-free paths for all agents.
-
+        Validates and plans conflict-free paths for all agents using cooperative A*.
+        
         :return: True if all agents have valid paths, False otherwise.
         """
         for agent in self.agents:
-            print(f"Planning path for Agent {agent.id}...")
-            # Plan a path for the agent considering the reservation table
-            path = agent.plan_path(self.grid, self.reservation_table)
+            print(f"Planning path for Agent {agent.id} with {heuristic_fn.__name__}...")
+            path = agent.plan_path(self.grid, self.reservation_table, heuristic_fn)
             if not path:
                 print(f"Agent {agent.id} could not find a conflict-free path!")
                 return False
@@ -33,14 +32,15 @@ class Simulation:
             print(f"Agent {agent.id} path: {path}")
         return True
 
-    def run(self):
+    def run(self, heuristic_fn):
         """
-        Executes the simulation by validating and running the agents' paths.
+        Executes the simulation by validating and running the agents' paths 
+        for the given heuristic function.
 
         :return: True if the simulation completes successfully, False otherwise.
         """
-        print("Starting simulation...")
-        if not self.validate_paths():
+        print(f"Starting simulation with {heuristic_fn.__name__}...")
+        if not self.validate_paths(heuristic_fn):
             print("One or more agents failed to find a path.")
             return False
 
