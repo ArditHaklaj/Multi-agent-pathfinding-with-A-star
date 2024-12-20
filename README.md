@@ -1,1 +1,1 @@
-# Multi-agent-pathfinding-with-A-
+# Multi-agent-pathfinding-with-A-star
