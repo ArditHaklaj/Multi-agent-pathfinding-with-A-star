@@ -58,13 +58,13 @@ Enter goal position (x y): 0 9
 
 ## Algorithm Details
 ### Modified A*
-- **Heuristic**: Uses Manhattan distance.
+- **Heuristic**: Uses Manhattan distance and Euclidean.
 - **Reservation Table**: Tracks reserved positions at each time step to avoid conflicts.
 - **Edge Conflicts**: Ensures agents do not swap positions at the same time.
 
 ## Visualization
 - Displays the grid with obstacles and agents' movements.
-- Agents are represented by distinct colors, and their goals are marked in red.
+- Agents are represented by distinct colors, and their goals are marked in the respective colors.
 - Animates step-by-step movements with adjustable time intervals.
 
 ## Students
