@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-
 class Visualizer:
     def __init__(self, grid, agents):
         self.grid = grid
@@ -16,10 +15,13 @@ class Visualizer:
             current_grid = grid_array.copy()
             plt.imshow(current_grid, cmap='Greys', origin='upper')
 
+            # Draw agent goals
             for agent in self.agents:
                 goal_x, goal_y = agent.goal
-                plt.scatter(goal_x, goal_y, color='red', s=200, marker='s', edgecolor='black', label="Goal" if t == 0 else "")
+                plt.scatter(goal_x, goal_y, color='red', s=200, marker='s', edgecolor='black', 
+                            label="Goal" if t == 0 else "")
 
+            # Draw agent positions
             for i, agent in enumerate(self.agents):
                 if t < len(agent.path):
                     x, y = agent.path[t]
