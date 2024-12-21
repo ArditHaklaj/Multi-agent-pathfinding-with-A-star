@@ -5,14 +5,14 @@ class Visualizer:
     def __init__(self, grid, agents):
         self.grid = grid
         self.agents = agents
-        self.agent_colors = ['blue', 'green', 'orange', 'purple', 'cyan', 'magenta', 'yellow', 'brown', 'pink', 'gray']
+        self.agent_colors = ['blue', 'green', 'orange', 'purple', 'cyan',
+                             'magenta', 'yellow', 'brown', 'pink', 'gray']
 
     def display(self, time_step=1):
         grid_array = np.array(self.grid.grid)
         max_time = max(len(agent.path) for agent in self.agents)
 
         # Set up the figure so each cell appears as a 1x1 square.
-        # Increase the figure size as needed for clarity.
         plt.figure(figsize=(self.grid.width, self.grid.height), dpi=80)
 
         for t in range(max_time):
@@ -26,18 +26,20 @@ class Visualizer:
             plt.yticks(np.arange(-0.5, self.grid.height, 1), [])
             plt.grid(visible=True, color='black', linestyle='-', linewidth=0.5)
 
-            # Plot the goals
-            for agent in self.agents:
+            # Plot the goals (use each agent's color instead of red)
+            for i, agent in enumerate(self.agents):
                 goal_x, goal_y = agent.goal
-                plt.scatter(goal_x, goal_y, color='red', s=200, marker='s', edgecolor='black', 
-                            label="Goal" if t == 0 else "")
+                agent_color = self.agent_colors[i % len(self.agent_colors)]
+                plt.scatter(goal_x, goal_y, color=agent_color, s=200, marker='s',
+                            edgecolor='black', label="Goal" if t == 0 else "")
 
             # Plot agent positions
             for i, agent in enumerate(self.agents):
                 if t < len(agent.path):
                     x, y = agent.path[t]
                     agent_color = self.agent_colors[i % len(self.agent_colors)]
-                    plt.scatter(x, y, color=agent_color, s=100, label=f'Agent {agent.id}' if t == 0 else "")
+                    plt.scatter(x, y, color=agent_color, s=100,
+                                label=f'Agent {agent.id}' if t == 0 else "")
 
             plt.title(f"Time Step: {t}")
             if t == 0:
@@ -59,7 +61,8 @@ class Visualizer:
             agent_color = self.agent_colors[i % len(self.agent_colors)]
             # Final position
             final_x, final_y = agent.path[-1]
-            plt.scatter(final_x, final_y, color=agent_color, s=100, label=f'Agent {agent.id} Final')
+            plt.scatter(final_x, final_y, color=agent_color, s=100,
+                        label=f'Agent {agent.id} Final')
 
             # Trail of the path
             path_x = [pos[0] for pos in agent.path]
