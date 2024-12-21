@@ -2,7 +2,7 @@ from agent import Agent
 from grid import Grid
 from visualization import Visualizer
 from simulation import Simulation
-
+from astar import manhattan_heuristic, euclidean_heuristic
 
 def main():
     width, height = 10, 10
@@ -29,7 +29,6 @@ def main():
                 start_x, start_y = map(int, input("Enter start position (x y): ").split())
                 goal_x, goal_y = map(int, input("Enter goal position (x y): ").split())
 
-                # Validate positions
                 if not grid.is_valid(start_x, start_y):
                     print("Invalid start position. Please enter valid coordinates.")
                     continue
@@ -40,21 +39,34 @@ def main():
                 agents.append(Agent(i, (start_x, start_y), (goal_x, goal_y)))
                 break
             except ValueError:
-                print("Invalid input format. Please enter two integers separated by a space.")
+                print("Invalid input. Please enter two integers separated by a space.")
 
-    simulation = Simulation(grid, agents)
-
-    if simulation.run():
-        print("All agents have completed pathfinding.")
+    # Run simulation with Manhattan heuristic
+    manhattan_simulation = Simulation(grid, agents)
+    if manhattan_simulation.run(manhattan_heuristic):
+        print("All agents have completed pathfinding with Manhattan heuristic.")
         for agent in agents:
-            print(f"Agent {agent.id} path: {agent.path}")
+            print(f"Agent {agent.id} path (Manhattan): {agent.path}")
 
-        # Visualize the paths
         visualizer = Visualizer(grid, agents)
-        visualizer.display(time_step=0.5)  # Adjust time_step for animation speed
+        print("Visualizing Manhattan heuristic paths...")
+        visualizer.display(time_step=0.5)
     else:
-        print("Pathfinding failed for one or more agents.")
+        print("Pathfinding failed for one or more agents with Manhattan heuristic.")
 
+    # For Euclidean heuristic, we need fresh agents (to avoid using already computed paths)
+    agents_euclidean = [Agent(a.id, a.start, a.goal) for a in agents]
+    euclidean_simulation = Simulation(grid, agents_euclidean)
+    if euclidean_simulation.run(euclidean_heuristic):
+        print("All agents have completed pathfinding with Euclidean heuristic.")
+        for agent in agents_euclidean:
+            print(f"Agent {agent.id} path (Euclidean): {agent.path}")
+
+        visualizer_euclidean = Visualizer(grid, agents_euclidean)
+        print("Visualizing Euclidean heuristic paths...")
+        visualizer_euclidean.display(time_step=0.5)
+    else:
+        print("Pathfinding failed for one or more agents with Euclidean heuristic.")
 
 if __name__ == "__main__":
     main()
